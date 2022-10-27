@@ -20,6 +20,22 @@ function addBookLS(title, author, isbn) {
     localStorage.setItem("books", JSON.stringify(books))
 }
 
+function deleteBookFromLocalStorage(title, author, isbn) {
+    let books
+    if (localStorage.getItem("books") === null) {
+        books = []
+    } else {
+        books = JSON.parse(localStorage.getItem("books"))
+        let deletableBook = [title, author, isbn]
+        books.forEach((book, i) => {
+            if (book[0] + book[1] + book[2] === deletableBook[0] + deletableBook[1] + deletableBook[2]) {
+                books.splice(i, 1)
+            }
+        })
+    }
+    localStorage.setItem("books", JSON.stringify(books))
+}
+
 // Add Book function
 function addBook(e) {
     // create book title column
@@ -66,6 +82,12 @@ function deleteBook(e) {
         if (confirm(`Are you sure you want to delete this book from the list?`)) {
             // get parent of parent element, which is always the row of the table
             let tableRow = e.target.parentElement.parentElement
+            let title = tableRow.children[0].textContent
+            let author = tableRow.children[1].textContent
+            let isbn = tableRow.children[2].textContent
+            isbn = isbn.slice(0, isbn.length - 1)
+            // delete from localStorage
+            deleteBookFromLocalStorage(title, author, isbn)
             // delete row
             tableRow.remove()
         }
