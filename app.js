@@ -4,6 +4,22 @@ const bookTitle = document.querySelector("#title")
 const bookAuthor = document.querySelector("#author")
 const bookISBN = document.querySelector("#isbn")
 
+// Book list
+const bookList = document.querySelector("#booklist")
+
+// Add book to localStorage
+function addBookLS(title, author, isbn) {
+    let books
+    if (localStorage.getItem("books") === null) {
+        books = []
+    } else {
+        books = JSON.parse(localStorage.getItem("books"))
+    }
+    const book = [title, author, isbn]
+    books.push(book)
+    localStorage.setItem("books", JSON.stringify(books))
+}
+
 // Add Book function
 function addBook(e) {
     // create book title column
@@ -35,7 +51,8 @@ function addBook(e) {
 
     // add newly created table row to the book table
     bookList.appendChild(newBook)
-
+    // add to localStorage
+    addBookLS(bookTitle.value, bookAuthor.value, bookISBN.value)
     // clear user input
     bookTitle.value = ""
     bookAuthor.value = ""
