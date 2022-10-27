@@ -20,6 +20,8 @@ function addBookLS(title, author, isbn) {
     localStorage.setItem("books", JSON.stringify(books))
 }
 
+
+// Delete book from local storage
 function deleteBookFromLocalStorage(title, author, isbn) {
     let books
     if (localStorage.getItem("books") === null) {
@@ -36,19 +38,31 @@ function deleteBookFromLocalStorage(title, author, isbn) {
     localStorage.setItem("books", JSON.stringify(books))
 }
 
-// Add Book function
-function addBook(e) {
+// Get books from LS
+function getBooksFromLocalStorage() {
+    let books
+    if (localStorage.getItem("books") === null) {
+        books = []
+    } else {
+        books = JSON.parse(localStorage.getItem("books"))
+    }
+    books.forEach((book) => {
+        addRow(book[0], book[1], book[2])
+    })
+}
+
+function addRow(bookTitle, bookAuthor, bookISBN) {
     // create book title column
     let colTitle = document.createElement("td")
-    colTitle.appendChild(document.createTextNode(bookTitle.value))
+    colTitle.appendChild(document.createTextNode(bookTitle))
 
     // create author column
     let colAuthor = document.createElement("td")
-    colAuthor.appendChild(document.createTextNode(bookAuthor.value))
+    colAuthor.appendChild(document.createTextNode(bookAuthor))
 
     // create ISBN column
     let colISBN = document.createElement("td")
-    colISBN.appendChild(document.createTextNode(bookISBN.value))
+    colISBN.appendChild(document.createTextNode(bookISBN))
 
     // add the delete button to the ISBN column
     let xLink = document.createElement("a")
@@ -67,6 +81,11 @@ function addBook(e) {
 
     // add newly created table row to the book table
     bookList.appendChild(newBook)
+}
+
+// Add Book function
+function addBook(e) {
+    addRow(bookTitle.value, bookAuthor.value, bookISBN.value)
     // add to localStorage
     addBookLS(bookTitle.value, bookAuthor.value, bookISBN.value)
     // clear user input
@@ -100,3 +119,4 @@ function deleteBook(e) {
 const submit = document.querySelector("#submit")
 submit.addEventListener("click", addBook)
 bookList.addEventListener("click", deleteBook)
+document.addEventListener("DOMContentLoaded", getBooksFromLocalStorage)
